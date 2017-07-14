@@ -22,13 +22,32 @@ var reducer = (state = stateDefault, action) => {
 
   return state;
 };
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, redux.compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+));
 
-console.log('currentState', store.getState());
+var unsubscribe = store.subscribe(() => {
+  var state = store.getState();
+
+  // console.log('searchText is', state.searchText);
+  document.getElementById('app').innerHTML = state.searchText;
+});
+
+// console.log('currentState', store.getState());
 
 store.dispatch({
   type: 'CHANGE_SEARCH_TEXT',
-  searchText: 'Pacifica'
+  searchText: 'Games'
+});
+
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  searchText: 'Work'
+});
+
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  searchText: 'Dog'
 });
 
 console.log('searchText should be Pacifica', store.getState());
